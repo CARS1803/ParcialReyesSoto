@@ -19,4 +19,25 @@ abstract class Conexion{
         return self::$conexion;
     }
 
+    //Creamos la funcion ejecutar.
+    public static function ejecutar($sql){
+        // Conectamos la bd.
+        self::conectar();
+        //Creamos y ejecutamos la sentencia.
+        $sentencia = self::$conexion->prepare($sql);
+        $resultado = $sentencia->execute();
+        // cerramos la conexion.
+        self::$conexion = null;
+        return $resultado;
+    }
+
+    public static function servir($sql){
+        // Conectamos la bd. y realizamos los mismos procedimientos a la funcion anterior.
+        self::conectar();
+        $sentencia = self::$conexion->prepare($sql);
+        $sentencia->execute();
+        $resultados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        self::$conexion = null;
+        return $resultados;
+    }
 }
